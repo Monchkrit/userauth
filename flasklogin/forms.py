@@ -3,6 +3,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField,PasswordField,SubmitField
 from wtforms.validators import DataRequired,Email,EqualTo
 from wtforms import ValidationError
+from flasklogin import models
 
 class LoginForm(FlaskForm):
   email = StringField('Email',validators=[DataRequired(),Email()])
@@ -17,9 +18,9 @@ class RegistrationForm(FlaskForm):
   submit = SubmitField('Register!')
 
   def validate_email(self,field):
-    if User.query.filter_by(email=field.data).first():
+    if models.User.query.filter_by(email=field.data).first():
       raise ValidationError('Email has been registered')
 
   def validate_username(self,field):
-    if User.query.filter_by(username=field.data).first():
+    if models.User.query.filter_by(username=field.data).first():
       raise ValidationError("Username is taken!")

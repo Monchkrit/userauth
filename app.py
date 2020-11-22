@@ -4,7 +4,6 @@ from flask import render_template,redirect,request,url_for,flash,abort
 from flask_login import login_user,login_required,logout_user
 from flasklogin.models import User
 from flasklogin.forms import LoginForm,RegistrationForm
-
 from flasklogin import app,db
 from werkzeug.security import generate_password_hash,check_password_hash
 
@@ -15,11 +14,11 @@ def home():
 @app.route('/welcome')
 @login_required
 def welcome_user():
-  return render_template('welcom_user.html')
+  return render_template('welcome_user.html')
 
 @app.route('/logout')
 @login_required
-def logout_user():
+def logout():
   logout_user()
   flash("You were logged out")
   return redirect(url_for('home'))
@@ -30,7 +29,6 @@ def login():
   form = LoginForm()
   if form.validate_on_submit():
     user = User.query.filter_by(email=form.email.data).first()
-
     if user.check_password(form.password.data) and user is not None:
       login_user(user)
       flash('Logged in Successfully!')
@@ -42,7 +40,7 @@ def login():
 
       return redirect(next)
 
-    return render_template('login.html',form=form)
+  return render_template('login.html',form=form)
 
 @app.route('/register',methods=['GET','POST'])
 def register():
